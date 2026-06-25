@@ -34,13 +34,15 @@ public abstract class Base extends LinearOpMode{
     public List<LynxModule> allHubs;
     public Motor fLeft, bLeft, fRight, bRight;
 
+    public Limelight3A limelight;
+
 
     GoBildaPinpointDriver odo;
 
 
 
 
-    public void initHardware(HardwareMap hardwareMap){
+    public void initHardware(HardwareMap hardwareMap, int pipeline){
 
         allHubs = hardwareMap.getAll(LynxModule.class);
 
@@ -65,21 +67,20 @@ public abstract class Base extends LinearOpMode{
         fLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
-        //Color Sensor Slot Detection
-        //Odometry Initialization
+
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //2.75, 1.75
 
         odo.setOffsets(-1.75, 2.75, DistanceUnit.INCH);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odo.resetPosAndIMU();
-//
-        odo.setOffsets(-1.75, 2.75, DistanceUnit.INCH);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        //Forward -> Positive X, Left -> Positive Y
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.resetPosAndIMU();
 
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        telemetry.setMsTransmissionInterval(11);
+        limelight.pipelineSwitch(pipeline);
+        limelight.start();
 
     }
 
@@ -222,7 +223,11 @@ public abstract class Base extends LinearOpMode{
                    ? Math.abs(angleDiff) > 0
                    : Math.abs(Angle.normalize(heading - getAngle())) > angleError) )))
 
+
+
                 && time.milliseconds() < timeout && opModeIsActive()) {
+
+
 
             odo.update();
             pos = odo.getPosition();
