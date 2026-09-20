@@ -32,7 +32,7 @@ import java.util.List;
 public abstract class Base extends LinearOpMode{
 
     public List<LynxModule> allHubs;
-    public Motor fLeft, bLeft, fRight, bRight;
+    public Motor fLeft, bLeft, fRight, bRight, sweep;
 
 
     GoBildaPinpointDriver odo;
@@ -55,6 +55,7 @@ public abstract class Base extends LinearOpMode{
         fRight = new Motor(hardwareMap, "fRight");
         bLeft = new Motor(hardwareMap, "bLeft");
         bRight = new Motor(hardwareMap, "bRight");
+        sweep = new Motor(hardwareMap, "sweep");
 
         fLeft.noEncoder();
         fRight.noEncoder();
@@ -97,7 +98,7 @@ public abstract class Base extends LinearOpMode{
         fRight = new Motor(hardwareMap, "fRight");
         bLeft = new Motor(hardwareMap, "bLeft");
         bRight = new Motor(hardwareMap, "bRight");
-
+        sweep = new Motor(hardwareMap, "sweep");
         fLeft.noEncoder();
         fRight.noEncoder();
         bLeft.noEncoder();
