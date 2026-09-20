@@ -16,11 +16,11 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.teamcode.Core.Angle;
 import org.firstinspires.ftc.teamcode.Core.Motor;
 import org.firstinspires.ftc.teamcode.Core.Point;
@@ -32,7 +32,7 @@ import java.util.List;
 public abstract class Base extends LinearOpMode{
 
     public List<LynxModule> allHubs;
-    public Motor fLeft, bLeft, fRight, bRight;
+    public Motor fLeft, bLeft, fRight, bRight, sweep;
 
 
     GoBildaPinpointDriver odo;
@@ -56,6 +56,9 @@ public abstract class Base extends LinearOpMode{
         bLeft = new Motor(hardwareMap, "bLeft");
         bRight = new Motor(hardwareMap, "bRight");
 
+        sweep = new Motor(hardwareMap, "sweep");
+
+
         fLeft.noEncoder();
         fRight.noEncoder();
         bLeft.noEncoder();
@@ -65,8 +68,6 @@ public abstract class Base extends LinearOpMode{
         fLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
-        //Color Sensor Slot Detection
-        //Odometry Initialization
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //2.75, 1.75
 
@@ -74,13 +75,6 @@ public abstract class Base extends LinearOpMode{
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.resetPosAndIMU();
-//
-        odo.setOffsets(-1.75, 2.75, DistanceUnit.INCH);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odo.resetPosAndIMU();
-
-
     }
 
     public void initHardware(HardwareMap hardwareMap, Boolean useCase){
@@ -133,7 +127,7 @@ public abstract class Base extends LinearOpMode{
 
 
 
-        rotX = rotX * 1.1;
+        rotX*=1.1;
 
         double denominator = Math.max( Math.abs(rotY) + Math.abs(rotX) + Math.abs(turn) , 1);
         double fLeftPow = (rotY + rotX + turn) / denominator;
@@ -387,14 +381,5 @@ public abstract class Base extends LinearOpMode{
 
         ChaseTheCarrot(wp, 9, 3, false, false, heading,3, 1,  0.05, 0.05, 0.03, 0.0005, 0, timeout, powerCap);
     }
-
-
-
-
-
-
-
-
-
 
 }
