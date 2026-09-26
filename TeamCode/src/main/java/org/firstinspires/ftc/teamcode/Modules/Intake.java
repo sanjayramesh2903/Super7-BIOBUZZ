@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Modules;
-
 import org.firstinspires.ftc.teamcode.Core.Motor;
 public class Intake {
     Motor sweep;

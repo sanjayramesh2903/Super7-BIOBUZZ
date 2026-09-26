@@ -32,7 +32,9 @@ import java.util.List;
 public abstract class Base extends LinearOpMode{
 
     public List<LynxModule> allHubs;
-    public Motor fLeft, bLeft, fRight, bRight, sweep;
+    public Motor fLeft, bLeft, fRight, bRight;
+    public Motor sweep, shooterOne, shooterTwo;
+    public CRServo transferServo;
 
 
     GoBildaPinpointDriver odo;
@@ -55,17 +57,21 @@ public abstract class Base extends LinearOpMode{
         fRight = new Motor(hardwareMap, "fRight");
         bLeft = new Motor(hardwareMap, "bLeft");
         bRight = new Motor(hardwareMap, "bRight");
-        sweep = new Motor(hardwareMap, "sweep");
+
+
 
         fLeft.noEncoder();
         fRight.noEncoder();
         bLeft.noEncoder();
         bRight.noEncoder();
 
+        sweep = new Motor(hardwareMap, "sweep");
+        shooterOne = new Motor(hardwareMap, "shooterOne");
+        shooterTwo = new Motor(hardwareMap, "shooterTwo");
         bLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         fLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
+        transferServo = hardwareMap.get(CRServo.class, "transferServo");
         //Color Sensor Slot Detection
         //Odometry Initialization
 
@@ -184,7 +190,6 @@ public abstract class Base extends LinearOpMode{
 
 
     //STATIONARY MOVEMENT FUNCTIONS - MAKE ANY NECESSARY CHANGES ON A NEW OVERLOADED METHOD
-
     //Incorporates CarrotChase Movement Algorithm with constantly running Shooter PID
     //TODO: Add parameter for shooter power, instead of setting to fixed velocity
     //Classic Chase the Carrot Movement Function
