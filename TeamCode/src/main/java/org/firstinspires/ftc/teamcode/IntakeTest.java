@@ -11,14 +11,22 @@ public class IntakeTest extends LinearOpMode {
         Motor intake = new Motor(hardwareMap, "intake");
         Motor shooterOne = new Motor(hardwareMap, "shooterOne");
         Motor shooterTwo = new Motor(hardwareMap, "shooterTwo");
+        double currentThreshold = 8.9;
         waitForStart();
         while(opModeIsActive()){
-            if(gamepad1.a){
-                intake.setPower(1);
+            if(gamepad2.dpad_up){
+                intake.setPower(-0.5);
+            } else if(gamepad2.dpad_down){
+                intake.setPower(0.5);
+            } else{
+                intake.setPower(0);
             }
             if(gamepad1.right_trigger > 0.05){
                 shooterTwo.setPower(0.5);
                 shooterOne.setPower(0.5);
+            }
+            if(intake.getCurrent()>currentThreshold){
+                intake.setPower(-1);
             }
         }
     }

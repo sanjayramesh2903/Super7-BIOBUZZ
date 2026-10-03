@@ -11,7 +11,7 @@ public class Shooter {
     public static double kp;
     public static double ki;
     public static double kd;
-    public void setPowers(Shooter shooter){
+    public void setPowers(Motor shooterOne, Motor shooterTwo){
 
     }
 

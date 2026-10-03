@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 public class Motor {
     DcMotor motor;
     int multiplier = 1;
@@ -47,6 +49,9 @@ public class Motor {
     public void useEncoder() {this.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}
 
     public void toPosition() {this.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
-
+    public double getCurrent(){
+        DcMotorEx motor1 = (DcMotorEx) motor;
+        return motor1.getCurrent(CurrentUnit.AMPS);
+    }
     public DcMotorEx retMotorEx() {return (DcMotorEx) motor;}
 }
