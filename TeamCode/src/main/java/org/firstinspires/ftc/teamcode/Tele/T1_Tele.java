@@ -19,7 +19,6 @@ public class T1_Tele extends Base {
         double nPow = 0.1;
         double pPow = 0.1;
         double powerCap = 0.9;
-        final double TRIGGER = 0.05;
         double currentThreshold = 8.9;
 
         while(opModeIsActive()){
