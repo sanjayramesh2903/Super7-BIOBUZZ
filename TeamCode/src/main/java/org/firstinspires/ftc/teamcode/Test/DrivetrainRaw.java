@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Base;
 import org.firstinspires.ftc.teamcode.Core.Motor;
-import org.firstinspires.ftc.teamcode.Modules.Intake;
-import org.firstinspires.ftc.teamcode.Modules.Shooter;
-import org.firstinspires.ftc.teamcode.Modules.Transfer;
+
 @TeleOp
 public class DrivetrainRaw extends Base {
     @Override

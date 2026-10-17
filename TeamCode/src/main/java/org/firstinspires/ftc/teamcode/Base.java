@@ -1,26 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Core.Angle;
 import org.firstinspires.ftc.teamcode.Core.Motor;
 import org.firstinspires.ftc.teamcode.Core.Point;
@@ -33,8 +24,7 @@ public abstract class Base extends LinearOpMode{
 
     public List<LynxModule> allHubs;
     public Motor fLeft, bLeft, fRight, bRight;
-    public Motor sweep, shooterOne, shooterTwo;
-    public CRServo transferServo;
+    public Motor sweep, nectar, pollen;
 
 
     GoBildaPinpointDriver odo;
@@ -66,27 +56,22 @@ public abstract class Base extends LinearOpMode{
         bRight.noEncoder();
 
         sweep = new Motor(hardwareMap, "sweep");
-        shooterOne = new Motor(hardwareMap, "shooterOne");
-        shooterTwo = new Motor(hardwareMap, "shooterTwo");
+        sweep.noEncoder();
+        nectar = new Motor(hardwareMap, "nectar");
+        nectar.noEncoder();
+        pollen = new Motor(hardwareMap, "pollen");
+        pollen.noEncoder();
         bLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         fLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        transferServo = hardwareMap.get(CRServo.class, "transferServo");
-        //Color Sensor Slot Detection
-        //Odometry Initialization
 
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //2.75, 1.75
+        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //3.5, -3
 
-        odo.setOffsets(-1.75, 2.75, DistanceUnit.INCH);
+        odo.setOffsets(3.5, -3, DistanceUnit.INCH);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.resetPosAndIMU();
 //
-        odo.setOffsets(-1.75, 2.75, DistanceUnit.INCH);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odo.resetPosAndIMU();
-
 
     }
 

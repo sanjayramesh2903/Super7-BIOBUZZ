@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,7 +9,7 @@ public class IntakeTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
         Motor intake = new Motor(hardwareMap, "intake");
-        Motor shooterOne = new Motor(hardwareMap, "shooterOne");
+        Motor shooterOne = new Motor(hardwareMap, "nectar");
         Motor shooterTwo = new Motor(hardwareMap, "shooterTwo");
         double currentThreshold = 8.9;
         waitForStart();

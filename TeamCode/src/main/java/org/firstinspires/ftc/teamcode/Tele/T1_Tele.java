@@ -1,18 +1,23 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Tele;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.Base;
 import org.firstinspires.ftc.teamcode.Modules.Intake;
-import org.firstinspires.ftc.teamcode.Modules.Shooter;
-import org.firstinspires.ftc.teamcode.Modules.Transfer;
+import org.firstinspires.ftc.teamcode.Modules.PollenShooter;
+import org.firstinspires.ftc.teamcode.Modules.NectarShooter;
 
+@TeleOp
 public class T1_Tele extends Base {
     @Override
     public void runOpMode() throws InterruptedException{
         initHardware(hardwareMap);
         Intake intake = new Intake(sweep);
-        Shooter shooter = new Shooter(shooterOne, shooterTwo);
-        Transfer transfer = new Transfer(transferServo);
+        PollenShooter pollenShooter = new PollenShooter(pollen);
+        NectarShooter nectarShooter = new NectarShooter(nectar);
         waitForStart();
-
+        double nPow = 0.1;
+        double pPow = 0.1;
         double powerCap = 0.9;
         final double TRIGGER = 0.05;
         double currentThreshold = 8.9;
@@ -25,13 +30,23 @@ public class T1_Tele extends Base {
 
             driveFieldCentric(drive, turn, strafe, powerCap);
             if(gamepad1.right_trigger > 0.05){
-                shooterOne.setPower(0.6);
-                shooterTwo.setPower(0.6);
+                pollen.setPower(pPow);
+                nectar.setPower(nPow);
             } else{
-                shooterOne.setPower(0);
-                shooterTwo.setPower(0);
+                nectar.setPower(0);
+                pollen.setPower(0);
             }
-
+            if(gamepad1.squareWasPressed()){
+                pPow-=0.1;
+                nPow-=0.1;
+            }
+            if(gamepad1.circleWasPressed()){
+                pPow+=0.1;
+                nPow+=0.1;
+            }
+            telemetry.addData("Pollen", pPow);
+            telemetry.addData("Nectar", nPow);
+            telemetry.update();
             //Intake logic lol
             if(gamepad2.dpad_up){
                 intake.sweepOut();
@@ -46,14 +61,6 @@ public class T1_Tele extends Base {
             }
 
 
-            //transgfer
-            if(gamepad1.left_bumper){
-                transfer.runTransferToShoot();
-            } else if(gamepad1.right_bumper){
-                transfer.runTransferAwayShoot();
-            } else{
-                transfer.stopTransfer();
-            }
 
         }
     }
