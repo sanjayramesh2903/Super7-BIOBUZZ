@@ -4,6 +4,8 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,7 +26,8 @@ public abstract class Base extends LinearOpMode{
 
     public List<LynxModule> allHubs;
     public Motor fLeft, bLeft, fRight, bRight;
-    public Motor sweep, nectar, pollen;
+    public Motor sweep;
+    public DcMotorEx pollen, nectar;
 
 
     GoBildaPinpointDriver odo;
@@ -48,8 +51,6 @@ public abstract class Base extends LinearOpMode{
         bLeft = new Motor(hardwareMap, "bLeft");
         bRight = new Motor(hardwareMap, "bRight");
 
-
-
         fLeft.noEncoder();
         fRight.noEncoder();
         bLeft.noEncoder();
@@ -57,12 +58,15 @@ public abstract class Base extends LinearOpMode{
 
         sweep = new Motor(hardwareMap, "sweep");
         sweep.noEncoder();
-        nectar = new Motor(hardwareMap, "nectar");
-        nectar.noEncoder();
-        pollen = new Motor(hardwareMap, "pollen");
-        pollen.noEncoder();
-        bLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        fLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        nectar = hardwareMap.get(DcMotorEx.class, "nectar");
+        nectar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        nectar = hardwareMap.get(DcMotorEx.class, "nectar");
+        nectar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        bRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        fRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //3.5, -3
@@ -71,7 +75,9 @@ public abstract class Base extends LinearOpMode{
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.resetPosAndIMU();
-//
+
+        pollen = hardwareMap.get(DcMotorEx.class, "pollen");
+        //pollen.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 

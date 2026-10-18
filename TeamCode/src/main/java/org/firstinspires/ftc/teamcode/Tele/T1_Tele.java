@@ -12,10 +12,13 @@ public class T1_Tele extends Base {
     @Override
     public void runOpMode() throws InterruptedException{
         initHardware(hardwareMap);
+
         Intake intake = new Intake(sweep);
         PollenShooter pollenShooter = new PollenShooter(pollen);
         NectarShooter nectarShooter = new NectarShooter(nectar);
+
         waitForStart();
+
         double nPow = 0.1;
         double pPow = 0.1;
         double powerCap = 0.9;
@@ -28,13 +31,19 @@ public class T1_Tele extends Base {
             double strafe = -gamepad1.left_stick_x;
 
             driveFieldCentric(drive, turn, strafe, powerCap);
+
+            //Shooter
             if(gamepad1.right_trigger > 0.05){
+//              pollenShooter.drive(1000);
+//              nectarShooter.drive(1000);
                 pollen.setPower(pPow);
                 nectar.setPower(nPow);
             } else{
-                nectar.setPower(0);
-                pollen.setPower(0);
+                pollen.setPower(0.0);
+                nectar.setPower(0.0);
             }
+
+            //Shooter Adjust
             if(gamepad1.squareWasPressed()){
                 pPow-=0.1;
                 nPow-=0.1;
@@ -43,10 +52,12 @@ public class T1_Tele extends Base {
                 pPow+=0.1;
                 nPow+=0.1;
             }
-            telemetry.addData("Pollen", pPow);
-            telemetry.addData("Nectar", nPow);
-            telemetry.update();
-            //Intake logic lol
+
+//            telemetry.addData("Pollen", pPow);
+//            telemetry.addData("Nectar", nPow);
+//            telemetry.update();
+
+            //Intake
             if(gamepad2.dpad_up){
                 intake.sweepOut();
             } else if(gamepad2.dpad_down){
@@ -54,10 +65,14 @@ public class T1_Tele extends Base {
             } else{
                 intake.stopSweep();
             }
+
             //Jam resistance
             if(sweep.getCurrent()>currentThreshold){
                 sweep.setPower(-1);
             }
+            
+            telemetry.addData("Pollen Shooter", pollen.getVelocity());
+            telemetry.update();
 
 
 

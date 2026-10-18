@@ -11,24 +11,26 @@ import org.firstinspires.ftc.teamcode.Modules.NectarShooter;
 import org.firstinspires.ftc.teamcode.Modules.PollenShooter;
 import org.firstinspires.ftc.teamcode.Core.Motor;
 @TeleOp
-public class PIDTest extends Base {
+public class PIDTest extends LinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException {
-        PollenShooter pollenShooter = new PollenShooter(pollen);
+        DcMotorEx pollen;
+        pollen = hardwareMap.get(DcMotorEx.class, "pollen");
+
         double kv = 0.0005;
 
         double kp = 0.01;
         double ki;
         double kd;
 
-        double targetVelo = 800;
+        double targetVelo = 100;
         double TPS = 0;
         double error = 0;
         waitForStart();
         while (opModeIsActive()) {
-            TPS = pollen.retMotorEx().getVelocity();
+            TPS = pollen.getVelocity();
 
-            error = targetVelo - pollen.retMotorEx().getVelocity();
+            error = targetVelo - pollen.getVelocity();
 
             double p = kp * error;
             double feedforward = kv * targetVelo;
@@ -36,6 +38,8 @@ public class PIDTest extends Base {
             double pow = p + feedforward;
 
             pollen.setPower(pow);
+            telemetry.addData("Velo", pollen.getVelocity());
+            telemetry.update();
         }
     }
 }

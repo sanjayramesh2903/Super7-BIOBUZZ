@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Modules;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import org.firstinspires.ftc.teamcode.Core.Motor;
 
 public class PollenShooter {
-    Motor pollen;
+    DcMotorEx pollen;
     //pid coefficients;
-    public static double kv = 0.0005;
+    /*public static double kv = 0.0005;
 
     public static double kp = 0.01;
     public static double ki;
@@ -14,14 +16,15 @@ public class PollenShooter {
     double targetVelo = 800;
     double TPS = 0;
     double error = 0;
+
     public void powerTest(double d){
         pollen.setPower(d);
     }
 
-    /*public void drive(double targetVelo){
-        TPS = pollen.retMotorEx().getVelocity();
+    public void drive(double targetVelo){
+        TPS = pollen.getVelocity();
 
-        error = targetVelo - pollen.retMotorEx().getVelocity();
+        error = targetVelo - pollen.getVelocity();
 
         double p = kp * error;
         double feedforward = kv * targetVelo;
@@ -31,8 +34,8 @@ public class PollenShooter {
         pollen.setPower(pow);
     }*/
 
-    public PollenShooter(Motor pollen){
+    public PollenShooter(DcMotorEx pollen){
         this.pollen = pollen;
     }
 
-}
+    }

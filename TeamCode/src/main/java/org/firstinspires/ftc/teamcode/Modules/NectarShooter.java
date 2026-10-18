@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.Modules;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import org.firstinspires.ftc.teamcode.Core.Motor;
 
 public class NectarShooter {
-    Motor nectar;
+    DcMotorEx nectar;
 
-    //pid coefficients;
-    public static double kv;
+    //pid coefficients
+    /*public static double kv;
 
     public static double kp;
     public static double ki;
@@ -18,10 +21,10 @@ public class NectarShooter {
     public void powerTest(double d){
         nectar.setPower(d);
     }
-    /*public void setPowers(double targetVelo){
-        TPS = nectar.retMotorEx().getVelocity();
+    public void drive(double targetVelo){
+        TPS = nectar.getVelocity();
 
-        error = targetVelo - nectar.retMotorEx().getVelocity();
+        error = targetVelo - nectar.getVelocity();
 
         double p = kp * error;
         double feedforward = kv * targetVelo;
@@ -31,7 +34,7 @@ public class NectarShooter {
         nectar.setPower(pow);
     }*/
 
-    public NectarShooter(Motor pollen){
+    public NectarShooter(DcMotorEx nectar){
         this.nectar = nectar;
     }
 
