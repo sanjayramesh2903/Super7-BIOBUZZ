@@ -17,29 +17,35 @@ public class PIDTest extends LinearOpMode{
         DcMotorEx pollen;
         pollen = hardwareMap.get(DcMotorEx.class, "pollen");
 
-        double kv = 0.0005;
+        double kv = 0.01212;
 
-        double kp = 0.01;
+        double kp = 0.00923;
         double ki;
         double kd;
 
-        double targetVelo = 100;
+        double targetVelo = 1320;
         double TPS = 0;
         double error = 0;
         waitForStart();
         while (opModeIsActive()) {
-            TPS = pollen.getVelocity();
+            TPS = Math.abs(pollen.getVelocity());
 
-            error = targetVelo - pollen.getVelocity();
+            error = targetVelo - TPS;
 
             double p = kp * error;
-            double feedforward = kv * targetVelo;
-
+            double feedforward = (kv * targetVelo);
             double pow = p + feedforward;
 
             pollen.setPower(pow);
             telemetry.addData("Velo", pollen.getVelocity());
             telemetry.update();
+            if(gamepad1.circleWasPressed()){
+                targetVelo += 50;
+            }
+            if(gamepad1.squareWasPressed()){
+                targetVelo-=50;
+            }
+            telemetry.addData("Target velo", targetVelo);
         }
     }
 }

@@ -56,28 +56,30 @@ public abstract class Base extends LinearOpMode{
         bLeft.noEncoder();
         bRight.noEncoder();
 
+        //Intake
         sweep = new Motor(hardwareMap, "sweep");
         sweep.noEncoder();
 
+        //Nshoot
         nectar = hardwareMap.get(DcMotorEx.class, "nectar");
         nectar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        nectar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        nectar = hardwareMap.get(DcMotorEx.class, "nectar");
-        nectar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //Pshoot
+        pollen = hardwareMap.get(DcMotorEx.class, "pollen");
+        pollen.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pollen.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         bRight.setDirection(DcMotorSimple.Direction.REVERSE);
         fRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
+        //Odo
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //3.5, -3
 
-        odo.setOffsets(3.5, -3, DistanceUnit.INCH);
+        odo.setOffsets(-3, -3.5, DistanceUnit.INCH);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.resetPosAndIMU();
-
-        pollen = hardwareMap.get(DcMotorEx.class, "pollen");
-        //pollen.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
 

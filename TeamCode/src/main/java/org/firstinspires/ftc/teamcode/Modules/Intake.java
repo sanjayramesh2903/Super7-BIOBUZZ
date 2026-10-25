@@ -8,9 +8,9 @@ public class Intake {
         this.sweep = sweep;
     }
     public void sweepIn(){
-        sweep.setPower(-0.5);
+        sweep.setPower(-0.8);
     }
-    public void sweepOut(){sweep.setPower(0.5);}
+    public void sweepOut(){sweep.setPower(0.8);}
     public void stopSweep(){
         sweep.setPower(0);
     }
