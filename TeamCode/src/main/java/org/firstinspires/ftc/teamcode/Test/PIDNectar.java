@@ -2,14 +2,8 @@ package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.Base;
-import org.firstinspires.ftc.teamcode.Modules.Intake;
-import org.firstinspires.ftc.teamcode.Modules.NectarShooter;
-import org.firstinspires.ftc.teamcode.Modules.PollenShooter;
-import org.firstinspires.ftc.teamcode.Core.Motor;
 @TeleOp
 public class PIDNectar extends LinearOpMode{
     @Override

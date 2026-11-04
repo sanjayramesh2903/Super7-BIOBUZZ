@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -27,7 +28,8 @@ public abstract class Base extends LinearOpMode{
     public List<LynxModule> allHubs;
     public Motor fLeft, bLeft, fRight, bRight;
     public Motor sweep;
-    public DcMotorEx pollen, nectar;
+    public DcMotorEx pollen;
+    public Servo intakeServo;
 
 
     GoBildaPinpointDriver odo;
@@ -61,18 +63,17 @@ public abstract class Base extends LinearOpMode{
         sweep.noEncoder();
 
         //Nshoot
-        nectar = hardwareMap.get(DcMotorEx.class, "nectar");
-        nectar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        nectar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //nectar = hardwareMap.get(DcMotorEx.class, "nectar");
+        //nectar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //nectar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Pshoot
+        /*Memories
         pollen = hardwareMap.get(DcMotorEx.class, "pollen");
-        pollen.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        pollen.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        */
         bRight.setDirection(DcMotorSimple.Direction.REVERSE);
         fRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        intakeServo = hardwareMap.get(Servo.class, "intakeServo");
         //Odo
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //3.5, -3
 
