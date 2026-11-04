@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class RobotCentricDriveTeleOp extends LinearOpMode {
 
     // Constants
-    private final double INTAKE_POWER = 0.7;
+    private final double INTAKE_POWER = 0.45;
     private final double SHOOTER_TARGET_VELOCITY = 1600.0;
 
     // Hardware
@@ -31,11 +31,11 @@ public class RobotCentricDriveTeleOp extends LinearOpMode {
         leftRear   = hardwareMap.get(DcMotor.class, "bLeft");
         rightRear  = hardwareMap.get(DcMotor.class, "bRight");
 
-        // Motor directions: Reverse left side motors so positive power moves robot forward
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
+        // Motor directions: Reverse right side motors so positive power moves robot forward
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftRear.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
 
         // Set BRAKE mode so motors stop sharply instead of coasting!
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -69,8 +69,8 @@ public class RobotCentricDriveTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             // Get inputs from gamepad1
             double y = -gamepad1.left_stick_y; // Y stick value is reversed (UP is positive)
-            double x = -gamepad1.left_stick_x * 1.1; // Reversed to fix Left/Right strafing
-            double rx = -gamepad1.right_stick_x;     // Reversed to fix Left/Right turning
+            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+            double rx = gamepad1.right_stick_x;
 
             // Apply deadzone to eliminate joystick centering drift
             if (Math.abs(y) < 0.05) y = 0;
@@ -81,7 +81,7 @@ public class RobotCentricDriveTeleOp extends LinearOpMode {
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            
+
             // Calculate motor powers
             double frontLeftPower  = (y + x + rx) / denominator;
             double backLeftPower   = (y - x + rx) / denominator;
@@ -127,7 +127,7 @@ public class RobotCentricDriveTeleOp extends LinearOpMode {
             telemetry.addData("Pollen Velocity", "Target: %.0f | Actual: %.0f", currentPollenTarget, currentPollenVelocity);
             telemetry.addData("Nectar Velocity", "Target: %.0f | Actual: %.0f", currentNectarTarget, currentNectarVelocity);
             telemetry.addData("Stick Inputs", "Y: %.2f, X: %.2f, RX: %.2f", y, x, rx);
-            telemetry.addData("Motor Powers", "FL: %.2f, FR: %.2f, BL: %.2f, BR: %.2f", 
+            telemetry.addData("Motor Powers", "FL: %.2f, FR: %.2f, BL: %.2f, BR: %.2f",
                     frontLeftPower, frontRightPower, backLeftPower, backRightPower);
             telemetry.update();
         }

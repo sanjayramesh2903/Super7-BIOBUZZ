@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class FieldCentricDriveTeleOp extends LinearOpMode {
 
     // Constants
-    private final double INTAKE_POWER = 0.7;
+    private final double INTAKE_POWER = 0.45;
     private final double SHOOTER_TARGET_VELOCITY = 1600.0;
 
     // Hardware
@@ -38,11 +38,11 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
         leftRear   = hardwareMap.get(DcMotor.class, "bLeft");
         rightRear  = hardwareMap.get(DcMotor.class, "bRight");
 
-        // Motor directions: Reverse left side motors so positive power moves robot forward
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
+        // Motor directions: Reverse right side motors so positive power moves robot forward
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        leftRear.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
 
         // Set BRAKE mode so motors stop sharply instead of coasting!
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -65,10 +65,10 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
         // Initialize Control Hub IMU ("imu")
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(
-            new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-            )
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                )
         );
         imu.initialize(parameters);
         imu.resetYaw();
@@ -95,8 +95,8 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
 
             // Get raw gamepad inputs
             double y = -gamepad1.left_stick_y; // Y stick value is reversed (UP is positive)
-            double x = -gamepad1.left_stick_x * 1.1; // Reversed to fix Left/Right strafing
-            double rx = -gamepad1.right_stick_x;     // Reversed to fix Left/Right turning
+            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+            double rx = gamepad1.right_stick_x;
 
             // Apply deadzone to eliminate joystick centering drift
             if (Math.abs(y) < 0.05) y = 0;
@@ -151,7 +151,7 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
             telemetry.addData("Mode", "Field Centric (Hub IMU)");
             telemetry.addData("Heading (Deg)", "%.1f", Math.toDegrees(botHeading));
             telemetry.addData("Rotated Inputs", "Y: %.2f, X: %.2f", rotY, rotX);
-            telemetry.addData("Motor Powers", "FL: %.2f, FR: %.2f, BL: %.2f, BR: %.2f", 
+            telemetry.addData("Motor Powers", "FL: %.2f, FR: %.2f, BL: %.2f, BR: %.2f",
                     frontLeftPower, frontRightPower, backLeftPower, backRightPower);
             telemetry.update();
         }
