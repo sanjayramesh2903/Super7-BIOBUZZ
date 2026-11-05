@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Base;
 import org.firstinspires.ftc.teamcode.Modules.Intake;
 import org.firstinspires.ftc.teamcode.Modules.IntakeServo;
+import org.firstinspires.ftc.teamcode.Pradeep.FlyWheelPIDF;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -23,12 +24,17 @@ public class T1_Tele extends Base {
         double kp = 0.00923;
         double ki;
         double kd;
-        double targetVelo = 650;
+        double targetVelo = 1530;
         double TPS = 0;
         double error = 0;
         double powerCap = 0.9;
         double currentThreshold = 8.9;
         boolean isServoUp = true;
+
+        FlyWheelPIDF pollenPID = new FlyWheelPIDF(0.0025, 0.0001, 0.0002, 0.00038);
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset();
+
         feeder.moveToStart();
         waitForStart();
 
@@ -41,19 +47,30 @@ public class T1_Tele extends Base {
             driveFieldCentric(drive, turn, strafe, powerCap);
 
             //Shooter
+            double currentPollenTarget = 0;
             if(gamepad2.right_trigger > 0.05) {
-                TPS = Math.abs(pollen.getVelocity());
 
-                error = targetVelo - TPS;
+                //TPS = Math.abs(pollen.getVelocity());
 
-                double p = kp * error;
-                double feedforward = (kv * targetVelo);
-                double pow = p + feedforward;
+                //error = targetVelo - TPS;
 
-                pollen.setPower(pow);
-            } else {
-                pollen.setPower(0);
+                //double p = kp * error;
+                //double feedforward = (kv * targetVelo);
+                //double pow = p + feedforward;
+
+                //pollen.setPower(pow);
+
+
+                currentPollenTarget = targetVelo;
+
             }
+            //else {
+            //    pollen.setPower(0);
+            //}
+            pollenPID.setTarget(currentPollenTarget);
+            double currentPollenVelocity = Math.abs(pollen.getVelocity());
+            double pollenPower = pollenPID.update(currentPollenVelocity, runtime.seconds());
+            pollen.setPower(pollenPower);
 
             //Intake
             if(gamepad1.dpad_up) {

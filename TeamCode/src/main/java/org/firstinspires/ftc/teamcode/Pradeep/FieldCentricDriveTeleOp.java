@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -15,13 +16,15 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
 
     // Constants
     private final double INTAKE_POWER = 0.45;
-    private final double SHOOTER_TARGET_VELOCITY = 1600.0;
+    private final double SHOOTER_TARGET_VELOCITY = 1480.0;
+    private final double FEEDER_PUSH_DEG = 0.83;
 
     // Hardware
     private DcMotor leftFront, rightFront, leftRear, rightRear;
     private DcMotor sweep;
     private DcMotorEx pollenShooter, nectarShooter;
     private IMU imu;
+    private Servo intakeServo;
 
     // Systems
     private FlyWheelPIDF pollenPID, nectarPID;
@@ -53,14 +56,18 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
         // Initialize Sweep Intake
         sweep = hardwareMap.get(DcMotor.class, "sweep");
 
+        // Initialize feeder servo
+        intakeServo = hardwareMap.get(Servo.class, "intakeServo");
+        intakeServo.setPosition(0);
+
         // Initialize Shooters
         pollenShooter = hardwareMap.get(DcMotorEx.class, "pollen");
         pollenShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
-        nectarShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        nectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
+        //nectarShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //nectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         // Initialize Control Hub IMU ("imu")
         imu = hardwareMap.get(IMU.class, "imu");
@@ -74,7 +81,7 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
         imu.resetYaw();
 
         pollenPID = new FlyWheelPIDF(0.0025, 0.0001, 0.0002, 0.00038);
-        nectarPID = new FlyWheelPIDF(0.0025, 0.0001, 0.0002, 0.00038);
+        //nectarPID = new FlyWheelPIDF(0.0025, 0.0001, 0.0002, 0.00038);
         runtime = new ElapsedTime();
 
         telemetry.addData("Status", "Initialized with Hub IMU. Ready.");
@@ -121,9 +128,9 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
             rightRear.setPower(backRightPower);
 
             // Sweep Intake Control (Run while held)
-            if (gamepad1.x || gamepad1.cross) {
+            if (gamepad1.cross) {
                 sweep.setPower(INTAKE_POWER);  // Intake on
-            } else if (gamepad1.y || gamepad1.triangle) {
+            } else if (gamepad1.triangle) {
                 sweep.setPower(-INTAKE_POWER); // Intake reverse
             } else {
                 sweep.setPower(0.0);  // Stop
@@ -138,17 +145,17 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
             double currentPollenVelocity = Math.abs(pollenShooter.getVelocity());
             pollenShooter.setPower(pollenPID.update(currentPollenVelocity, runtime.seconds()));
 
-            // Nectar Shooter Control (Right Trigger)
-            double currentNectarTarget = 0;
-            if (gamepad1.right_trigger > 0.1) {
-                currentNectarTarget = SHOOTER_TARGET_VELOCITY;
+            // Feeder servo control
+            if (gamepad1.left_bumper){
+                intakeServo.setPosition(FEEDER_PUSH_DEG);
             }
-            nectarPID.setTarget(currentNectarTarget);
-            double currentNectarVelocity = Math.abs(nectarShooter.getVelocity());
-            nectarShooter.setPower(nectarPID.update(currentNectarVelocity, runtime.seconds()));
+            else {
+                intakeServo.setPosition(0.4);
+            }
 
             // Telemetry Output
             telemetry.addData("Mode", "Field Centric (Hub IMU)");
+            telemetry.addData("Pollen Velocity", "Target: %.0f | Actual: %.0f", currentPollenTarget, currentPollenVelocity);
             telemetry.addData("Heading (Deg)", "%.1f", Math.toDegrees(botHeading));
             telemetry.addData("Rotated Inputs", "Y: %.2f, X: %.2f", rotY, rotX);
             telemetry.addData("Motor Powers", "FL: %.2f, FR: %.2f, BL: %.2f, BR: %.2f",

@@ -12,7 +12,7 @@ public class RobotCentricDriveTeleOp extends LinearOpMode {
 
     // Constants
     private final double INTAKE_POWER = 0.45;
-    private final double SHOOTER_TARGET_VELOCITY = 1600.0;
+    private final double SHOOTER_TARGET_VELOCITY = 1480.0;
 
     // Hardware
     private DcMotor leftFront, rightFront, leftRear, rightRear;
@@ -51,12 +51,12 @@ public class RobotCentricDriveTeleOp extends LinearOpMode {
         pollenShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
-        nectarShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        nectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
+        //nectarShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //nectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         pollenPID = new FlyWheelPIDF(0.0025, 0.0001, 0.0002, 0.00038);
-        nectarPID = new FlyWheelPIDF(0.0025, 0.0001, 0.0002, 0.00038);
+        //nectarPID = new FlyWheelPIDF(0.0025, 0.0001, 0.0002, 0.00038);
         runtime = new ElapsedTime();
 
         // Tell the driver that initialization is complete.
@@ -113,19 +113,19 @@ public class RobotCentricDriveTeleOp extends LinearOpMode {
             pollenShooter.setPower(pollenPID.update(currentPollenVelocity, runtime.seconds()));
 
             // Nectar Shooter Control (Right Trigger)
-            double currentNectarTarget = 0;
-            if (gamepad1.right_trigger > 0.1) {
-                currentNectarTarget = SHOOTER_TARGET_VELOCITY;
-            }
-            nectarPID.setTarget(currentNectarTarget);
-            double currentNectarVelocity = Math.abs(nectarShooter.getVelocity());
-            nectarShooter.setPower(nectarPID.update(currentNectarVelocity, runtime.seconds()));
+            //double currentNectarTarget = 0;
+            //if (gamepad1.right_trigger > 0.1) {
+            //    currentNectarTarget = SHOOTER_TARGET_VELOCITY;
+            //}
+            //nectarPID.setTarget(currentNectarTarget);
+            //double currentNectarVelocity = Math.abs(nectarShooter.getVelocity());
+            //nectarShooter.setPower(nectarPID.update(currentNectarVelocity, runtime.seconds()));
 
             // Telemetry Output
             telemetry.addData("Mode", "Robot Centric");
             telemetry.addData("Sweep Power", sweep.getPower());
             telemetry.addData("Pollen Velocity", "Target: %.0f | Actual: %.0f", currentPollenTarget, currentPollenVelocity);
-            telemetry.addData("Nectar Velocity", "Target: %.0f | Actual: %.0f", currentNectarTarget, currentNectarVelocity);
+            //telemetry.addData("Nectar Velocity", "Target: %.0f | Actual: %.0f", currentNectarTarget, currentNectarVelocity);
             telemetry.addData("Stick Inputs", "Y: %.2f, X: %.2f, RX: %.2f", y, x, rx);
             telemetry.addData("Motor Powers", "FL: %.2f, FR: %.2f, BL: %.2f, BR: %.2f",
                     frontLeftPower, frontRightPower, backLeftPower, backRightPower);
