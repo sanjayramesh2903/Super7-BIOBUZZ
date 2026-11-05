@@ -138,7 +138,7 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
 
             // Pollen Shooter Control (Left Trigger)
             double currentPollenTarget = 0;
-            if (gamepad1.left_trigger > 0.1) {
+            if (gamepad2.left_trigger > 0.1) {
                 currentPollenTarget = SHOOTER_TARGET_VELOCITY;
             }
             pollenPID.setTarget(currentPollenTarget);
@@ -146,7 +146,7 @@ public class FieldCentricDriveTeleOp extends LinearOpMode {
             pollenShooter.setPower(pollenPID.update(currentPollenVelocity, runtime.seconds()));
 
             // Feeder servo control
-            if (gamepad1.left_bumper){
+            if (gamepad2.x){
                 intakeServo.setPosition(FEEDER_PUSH_DEG);
             }
             else {
