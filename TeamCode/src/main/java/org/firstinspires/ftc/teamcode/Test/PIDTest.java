@@ -30,7 +30,12 @@ public class PIDTest extends LinearOpMode{
             double feedforward = (kv * targetVelo);
             double pow = p + feedforward;
 
-            pollen.setPower(pow);
+            if(gamepad1.left_trigger > 0.05){
+                pollen.setPower(-pow);
+            } else{
+                pollen.setPower(0);
+            }
+
             telemetry.addData("Velo", pollen.getVelocity());
             telemetry.update();
             if(gamepad1.circleWasPressed()){

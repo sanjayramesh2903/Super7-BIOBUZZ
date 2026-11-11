@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class IntakeServo {
     Servo intakeServo;
-    double start = 0;
+    double start = 0.4;
     double feed = 0.83;
     public void moveToStart(){
         intakeServo.setPosition(start);

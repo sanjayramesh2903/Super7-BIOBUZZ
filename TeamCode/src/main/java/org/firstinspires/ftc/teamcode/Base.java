@@ -28,25 +28,15 @@ public abstract class Base extends LinearOpMode{
     public List<LynxModule> allHubs;
     public Motor fLeft, bLeft, fRight, bRight;
     public Motor sweep;
-    public DcMotorEx pollen;
     public Servo intakeServo;
-
 
     GoBildaPinpointDriver odo;
 
-
-
-
     public void initHardware(HardwareMap hardwareMap){
-
-        allHubs = hardwareMap.getAll(LynxModule.class);
-
-        for (LynxModule hub : allHubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        }
-
-
-        //Drive Motors
+        //allHubs = hardwareMap.getAll(LynxModule.class);
+        //for (LynxModule hub : allHubs) {
+            //hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        //}
 
         fLeft = new Motor(hardwareMap, "fLeft");
         fRight = new Motor(hardwareMap, "fRight");
@@ -62,58 +52,19 @@ public abstract class Base extends LinearOpMode{
         sweep = new Motor(hardwareMap, "sweep");
         sweep.noEncoder();
 
-        //Nshoot
-        //nectar = hardwareMap.get(DcMotorEx.class, "nectar");
-        //nectar.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //nectar.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        //Pshoot
-        /*Memories
-        pollen = hardwareMap.get(DcMotorEx.class, "pollen");
-        */
         bRight.setDirection(DcMotorSimple.Direction.REVERSE);
         fRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
         intakeServo = hardwareMap.get(Servo.class, "intakeServo");
         //Odo
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //3.5, -3
 
-        odo.setOffsets(-3, -3.5, DistanceUnit.INCH);
+        odo.setOffsets(3, -3.5, DistanceUnit.INCH);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.resetPosAndIMU();
 
     }
-
-    public void initHardware(HardwareMap hardwareMap, Boolean useCase){
-
-        allHubs = hardwareMap.getAll(LynxModule.class);
-
-        for (LynxModule hub : allHubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        }
-
-
-        //Drive Motors
-        fLeft = new Motor(hardwareMap, "fLeft");
-        fRight = new Motor(hardwareMap, "fRight");
-        bLeft = new Motor(hardwareMap, "bLeft");
-        bRight = new Motor(hardwareMap, "bRight");
-        sweep = new Motor(hardwareMap, "sweep");
-        fLeft.noEncoder();
-        fRight.noEncoder();
-        bLeft.noEncoder();
-        bRight.noEncoder();
-
-        bLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        fLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //Initialize Modules
-
-
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //2.75, 1.75
-
-    }
-
     //Clear Cache
 
     public void resetCache(){
@@ -204,7 +155,7 @@ public abstract class Base extends LinearOpMode{
             double turnD,
             double timeout, double powerCap) {
         ElapsedTime time = new ElapsedTime();
-        resetCache();
+        //resetCache();
         odo.update();
         Pose2D pos = odo.getPosition();
 
@@ -229,7 +180,7 @@ public abstract class Base extends LinearOpMode{
 
 
 
-            resetCache();
+            //resetCache();
 
 
             double x = pos.getX(DistanceUnit.INCH);
@@ -240,7 +191,7 @@ public abstract class Base extends LinearOpMode{
             if (getRobotDistanceFromPoint(wp.get(pt)) <= switchTolerance && pt != wp.size() - 1) {
                 odo.update();
 
-                resetCache();
+                //resetCache();
                 pt = Math.min(wp.size()-1, pt+skip);
             }
 
