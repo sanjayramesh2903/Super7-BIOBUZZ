@@ -27,7 +27,7 @@ public class LM1TeleopRealNotFake extends Base {
         double targetVelo = 670;
         double TPS = 0;
         double error = 0;
-
+        intakeServo.setPosition(0.4);
         waitForStart();
         while (opModeIsActive()) {
             //SHOOTER{
@@ -46,10 +46,13 @@ public class LM1TeleopRealNotFake extends Base {
             }
 
             if(gamepad2.circleWasPressed()){
-                targetVelo += 50;
+                targetVelo += 15;
             }
             if(gamepad2.squareWasPressed()){
-                targetVelo-=50;
+                targetVelo-=15;
+            }
+            if(gamepad2.dpad_down){
+                pollen.setPower(0.3);
             }
             //}
 
@@ -57,26 +60,26 @@ public class LM1TeleopRealNotFake extends Base {
             double turn = gamepad1.right_stick_x;
             double strafe = gamepad1.left_stick_x;
 
-            driveFieldCentric(drive, turn, strafe, powerCap);
+            driveFieldCentric(drive, turn, strafe, 1);
             //Intake
             if(gamepad1.triangle) {
-                intake.sweepOut();
+                sweep.setPower(0.45);
             } else if(gamepad1.cross) {
-                intake.sweepIn();
+                sweep.setPower(-0.45);
             } else {
                 intake.stopSweep();
             }
 
-            /**
-            if(sweep.getCurrent()>currentThreshold) {
-                sweep.setPower(-1);
-            }
-             **/
+
+            //if(sweep.getCurrent()>currentThreshold) {
+              //  sweep.setPower(-1);
+            //}
+
             //Servo
             if(gamepad2.triangle){
-                intakeServo.setPosition(0.83);
-            } else{
                 intakeServo.setPosition(0.4);
+            } else{
+                intakeServo.setPosition(0.83);
             }
 
 

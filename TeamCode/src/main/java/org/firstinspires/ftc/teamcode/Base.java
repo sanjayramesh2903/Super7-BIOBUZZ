@@ -35,7 +35,7 @@ public abstract class Base extends LinearOpMode{
     public void initHardware(HardwareMap hardwareMap){
         //allHubs = hardwareMap.getAll(LynxModule.class);
         //for (LynxModule hub : allHubs) {
-            //hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+          //  hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         //}
 
         fLeft = new Motor(hardwareMap, "fLeft");
@@ -57,9 +57,9 @@ public abstract class Base extends LinearOpMode{
 
         intakeServo = hardwareMap.get(Servo.class, "intakeServo");
         //Odo
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); //3.5, -3
+        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
-        odo.setOffsets(3, -3.5, DistanceUnit.INCH);
+        odo.setOffsets(3.75, 3.75, DistanceUnit.INCH);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.resetPosAndIMU();
@@ -341,6 +341,17 @@ public abstract class Base extends LinearOpMode{
 
 
 
+    public double calculateD(double curr_error, double prev_error, double curr_time, double prev_time){
+
+        double k_d = 0.05; //Tune this coefficient
+        double error_diff = curr_error - prev_error;
+        double time_diff = curr_time - prev_time;
+
+        double errorByTime = error_diff / time_diff;
+        double d = k_d * errorByTime;
+
+        return d;
+    }
 
 
 
@@ -348,4 +359,60 @@ public abstract class Base extends LinearOpMode{
 
 
 
+    public void moveToPosition(double targetX, double targetY, double targetAngle, double MOE, double angleMOE, double maxTime){
+        ElapsedTime timer = new ElapsedTime();
+        double xError = 200, yError = 200, angleError = 200; //Set arbitrary values that are larger than the MOE
+        double previousTime = 0;
+        while(timer.milliseconds() <= maxTime && (Math.abs(xError) >= MOE || Math.abs(yError) >= MOE || Math.abs(angleError) >= angleMOE)){
+            odo.update();
+            for (LynxModule hub : allHubs) {
+                hub.clearBulkCache();
+            }
+            telemetry.addData("XError", xError);
+            telemetry.addData("angleError", angleError);
+            telemetry.addData("yError", yError);
+            telemetry.update();
+
+            double previousX = xError;
+            double previousY = yError;
+            double previousTheta = angleError;
+
+            double k_P = 1; //Tune this coefficient
+            double currentTime = timer.milliseconds();
+            previousTime = currentTime;
+
+            xError = targetX - getX();
+            yError = targetY - getY();
+            // normalize the angle to ensure efficient turning
+            angleError = normalizeAngle(targetAngle - getAngle());
+
+            double xP = k_P * xError;
+            double yP = k_P * yError;
+            double thetaP = k_P * angleError;
+
+            double xD = calculateD(xError, previousX, currentTime, previousTime);
+            double yD = calculateD(yError, previousY, currentTime, previousTime);
+            double thetaD = calculateD(angleError, previousTheta, currentTime, previousTime);
+
+            double xPow = xP + xD;
+            double yPow = yP + yD;
+            double anglePow = thetaP + thetaD;
+
+            //driveFieldCentric(drive, strafe, turn);
+            driveFieldCentric(yPow, xPow, anglePow, 0.9);
+            //experiment to see if y is your drive or strafe
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+    }
 }

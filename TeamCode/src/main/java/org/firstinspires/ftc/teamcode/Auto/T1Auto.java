@@ -26,7 +26,7 @@ public class T1Auto extends Base {
         double kp = 0.00856;
         double ki;
         double kd;
-        double targetVelo = 700;
+        double targetVelo = 720;
         double TPS = 0;
         double error = 0;
         boolean shooterOn = true;
@@ -41,24 +41,28 @@ public class T1Auto extends Base {
         park.addAll(
                 new ArrayList<>(
                         Arrays.asList(
-                                new Point(5,0,0,0.5)
+                                new Point(3,0,0,0.8)
                         )
                 )
         );
         intakeServo.setPosition(0.4);
         waitForStart();
-
-        //ChaseTheCarrotConstantHeading(park, 9, 3, 0, 3, 1, 0.05, 0.05, 0.03, 0.0005, 0.0005, 2500, 0.5);
-        sleep(500);
         firstShoot.reset();
         firstIntake.reset();
-        while(firstShoot.time() < 1000){
-            driveFieldCentricAuto(-0.3,0,0,0.5);
+        //moveToPosition(10,-30,0,2,2,3000);
+        //ChaseTheCarrotConstantHeading(park, 9, 3, 0, 3, 1, 0.05, 0.05, 0.03, 0.0005, 0.0005, 2500, 0.7);
+
+
+
+
+
+
+        while(firstShoot.time() < 150){
+            driveFieldCentricAuto(-1,0,0,1);
         }
         stopDrive();
-
-
-        while(firstShoot.time() < 7000){
+        sleep(500);
+        while(firstShoot.time() < 9000){
             if(firstShoot.time() > 1000 && firstShoot.time() < 1500){
                 intakeServo.setPosition(0.83);
             }
@@ -77,6 +81,12 @@ public class T1Auto extends Base {
             if(firstShoot.time() > 6000 && firstShoot.time() < 6500){
                 intakeServo.setPosition(0.4);
             }
+            if(firstShoot.time() > 7000 && firstShoot.time() < 7500){
+                intakeServo.setPosition(0.83);
+            }
+            if(firstShoot.time() > 8000 && firstShoot.time() < 8500){
+                intakeServo.setPosition(0.4);
+            }
             if(firstShoot.time() > 2200){
                 sweep.setPower(-0.45);
             } else{
@@ -92,12 +102,18 @@ public class T1Auto extends Base {
 
             pollen.setPower(-pow);
         }
-
         pollen.setPower(0);
         intake.stopSweep();
-        sleep(1000);
-
-        //ChaseTheCarrot();
+        sleep(500);
+        firstIntake.reset();
+        while(firstIntake.time() < 500){
+            driveFieldCentricAuto(0,0.8,0,0.8);
+        }
+        sleep(500);
+        firstIntake.reset();
+        while(firstIntake.time() < 2250){
+            driveFieldCentricAuto(-0.7,0,0,0.7);
+        }
 
 
 
